@@ -1,8 +1,6 @@
 #define TOML_HEADER_ONLY 1
-// Disable assertions to handle invalid input gracefully with proper error
-// messages
-#define TOML_ASSERT(expr) static_cast<void>(0)
-#define TOML_ASSERT_ASSUME(expr) static_cast<void>(0)
+// Disable assertions to handle invalid input gracefully
+#define NDEBUG 1
 #include "include/CTomlPlusPlus.hpp"
 #include "toml.hpp"
 
