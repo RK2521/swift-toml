@@ -1,6 +1,7 @@
 .PHONY: all build test test-decoder test-encoder clean
 
-TOML_TEST := go run github.com/toml-lang/toml-test/cmd/toml-test@latest
+GO ?= go
+TOML_TEST := $(GO) run github.com/toml-lang/toml-test/cmd/toml-test@latest
 DECODER := .build/debug/toml-decoder
 ENCODER := .build/debug/toml-encoder
 
