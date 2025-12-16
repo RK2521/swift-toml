@@ -212,13 +212,23 @@ public final class TOMLDecoder {
             throw TOMLDecodingError.invalidData("Unknown parse error")
         }
 
-        return convertNode(result.root)
+        return try convertNode(result.root, depth: 0)
     }
 
-    private func convertNode(_ node: tomlpp.Node) -> TOMLValue {
+    private func convertNode(_ node: tomlpp.Node, depth: Int) throws -> TOMLValue {
+        guard depth < limits.maxDepth else {
+            throw TOMLDecodingError.invalidData("Maximum nesting depth of \(limits.maxDepth) exceeded")
+        }
+
         switch node.getType() {
         case .String:
-            return .string(String(node.getString()))
+            let str = String(node.getString())
+            guard str.count <= limits.maxStringLength else {
+                throw TOMLDecodingError.invalidData(
+                    "String exceeds maximum length of \(limits.maxStringLength) characters"
+                )
+            }
+            return .string(str)
 
         case .Integer:
             return .integer(node.getInteger())
@@ -281,21 +291,27 @@ public final class TOMLDecoder {
 
         case .Array:
             let count = node.getArraySize()
+            guard count <= limits.maxArrayLength else {
+                throw TOMLDecodingError.invalidData("Array exceeds maximum length of \(limits.maxArrayLength) elements")
+            }
             var values: [TOMLValue] = []
             for i in 0 ..< count {
                 let element = node.getArrayElement(i)
-                values.append(convertNode(element))
+                try values.append(convertNode(element, depth: depth + 1))
             }
             return .array(values)
 
         case .Table:
             let count = node.getTableSize()
+            guard count <= limits.maxTableKeys else {
+                throw TOMLDecodingError.invalidData("Table exceeds maximum of \(limits.maxTableKeys) keys")
+            }
             var dict: [String: TOMLValue] = [:]
             for i in 0 ..< count {
                 let key = String(node.getTableKey(i))
                 let valueOpt = node.getTableValue(std.string(key))
                 if Bool(fromCxx: valueOpt) {
-                    dict[key] = convertNode(valueOpt.pointee)
+                    dict[key] = try convertNode(valueOpt.pointee, depth: depth + 1)
                 }
             }
             return .table(dict)
