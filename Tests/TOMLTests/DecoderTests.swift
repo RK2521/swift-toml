@@ -617,9 +617,8 @@ struct TOMLDecoderTests {
     // MARK: - Decoding Limits
 
     @Test func decodingLimitsMaxInputSize() throws {
-        let limits = TOMLDecoder.DecodingLimits(maxInputSize: 10)
         let decoder = TOMLDecoder()
-        decoder.limits = limits
+        decoder.limits.maxInputSize = 10
         let toml = "name = \"this is a very long string that exceeds the limit\""
 
         #expect(throws: TOMLDecodingError.self) {
@@ -628,7 +627,7 @@ struct TOMLDecoderTests {
     }
 
     @Test func decodingLimitsDefaults() {
-        let limits = TOMLDecoder.DecodingLimits()
+        let limits = TOMLDecoder.DecodingLimits.default
 
         #expect(limits.maxInputSize == 10 * 1024 * 1024)
         #expect(limits.maxDepth == 128)
@@ -638,8 +637,8 @@ struct TOMLDecoderTests {
     }
 
     @Test func decodingLimitsMaxDepth() throws {
-        let limits = TOMLDecoder.DecodingLimits(maxDepth: 2)
-        let decoder = TOMLDecoder(limits: limits)
+        let decoder = TOMLDecoder()
+        decoder.limits.maxDepth = 2
         // Depth: root (0) -> a (1) -> b (2) -> c (3) - exceeds limit of 2
         let toml = """
             [a.b.c]
@@ -652,8 +651,8 @@ struct TOMLDecoderTests {
     }
 
     @Test func decodingLimitsMaxDepthAllowed() throws {
-        let limits = TOMLDecoder.DecodingLimits(maxDepth: 5)
-        let decoder = TOMLDecoder(limits: limits)
+        let decoder = TOMLDecoder()
+        decoder.limits.maxDepth = 5
         // Depth: root (0) -> a (1) -> b (2) -> c (3) -> value (4) - within limit of 5
         let toml = """
             [a.b.c]
@@ -665,8 +664,8 @@ struct TOMLDecoderTests {
     }
 
     @Test func decodingLimitsMaxTableKeys() throws {
-        let limits = TOMLDecoder.DecodingLimits(maxTableKeys: 3)
-        let decoder = TOMLDecoder(limits: limits)
+        let decoder = TOMLDecoder()
+        decoder.limits.maxTableKeys = 3
         let toml = """
             a = 1
             b = 2
@@ -680,8 +679,8 @@ struct TOMLDecoderTests {
     }
 
     @Test func decodingLimitsMaxTableKeysAllowed() throws {
-        let limits = TOMLDecoder.DecodingLimits(maxTableKeys: 3)
-        let decoder = TOMLDecoder(limits: limits)
+        let decoder = TOMLDecoder()
+        decoder.limits.maxTableKeys = 3
         let toml = """
             a = 1
             b = 2
@@ -693,8 +692,8 @@ struct TOMLDecoderTests {
     }
 
     @Test func decodingLimitsMaxArrayLength() throws {
-        let limits = TOMLDecoder.DecodingLimits(maxArrayLength: 3)
-        let decoder = TOMLDecoder(limits: limits)
+        let decoder = TOMLDecoder()
+        decoder.limits.maxArrayLength = 3
         let toml = """
             items = [1, 2, 3, 4]
             """
@@ -709,8 +708,8 @@ struct TOMLDecoderTests {
     }
 
     @Test func decodingLimitsMaxArrayLengthAllowed() throws {
-        let limits = TOMLDecoder.DecodingLimits(maxArrayLength: 3)
-        let decoder = TOMLDecoder(limits: limits)
+        let decoder = TOMLDecoder()
+        decoder.limits.maxArrayLength = 3
         let toml = """
             items = [1, 2, 3]
             """
@@ -724,8 +723,8 @@ struct TOMLDecoderTests {
     }
 
     @Test func decodingLimitsMaxStringLength() throws {
-        let limits = TOMLDecoder.DecodingLimits(maxStringLength: 10)
-        let decoder = TOMLDecoder(limits: limits)
+        let decoder = TOMLDecoder()
+        decoder.limits.maxStringLength = 10
         let toml = """
             name = "this string is too long"
             """
@@ -736,8 +735,8 @@ struct TOMLDecoderTests {
     }
 
     @Test func decodingLimitsMaxStringLengthAllowed() throws {
-        let limits = TOMLDecoder.DecodingLimits(maxStringLength: 10)
-        let decoder = TOMLDecoder(limits: limits)
+        let decoder = TOMLDecoder()
+        decoder.limits.maxStringLength = 10
         let toml = """
             name = "short"
             """

@@ -197,12 +197,16 @@ Protect against malicious or malformed input:
 
 ```swift
 let decoder = TOMLDecoder()
-decoder.limits = TOMLDecoder.DecodingLimits(
-    maxInputSize: 1024 * 1024,  // 1 MB (default: 10 MB)
-    maxDepth: 64,               // default: 128
-    maxTableKeys: 1000,         // default: 10,000
-    maxArrayLength: 10_000      // default: 100,000
-)
+decoder.limits.maxInputSize = 1024 * 1024  // 1 MB (default: 10 MB)
+decoder.limits.maxDepth = 64               // default: 128
+decoder.limits.maxTableKeys = 1000         // default: 10,000
+decoder.limits.maxArrayLength = 10_000     // default: 100,000
+```
+
+For trusted input where you need no restrictions:
+
+```swift
+decoder.limits = .unlimited
 ```
 
 ## License

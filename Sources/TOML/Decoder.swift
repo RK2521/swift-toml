@@ -86,44 +86,63 @@ public final class TOMLDecoder {
     /// untrusted TOML data.
     public struct DecodingLimits: Sendable {
         /// Maximum input size in bytes.
-        ///
-        /// Default: 10 MB
         public var maxInputSize: Int
 
         /// Maximum nesting depth for tables and arrays.
-        ///
-        /// Default: 128
         public var maxDepth: Int
 
         /// Maximum number of keys in a single table.
-        ///
-        /// Default: 10,000
         public var maxTableKeys: Int
 
         /// Maximum number of elements in an array.
-        ///
-        /// Default: 100,000
         public var maxArrayLength: Int
 
         /// Maximum length of a string value in characters.
-        ///
-        /// Default: 1 MB
         public var maxStringLength: Int
 
-        /// Creates new decoding limits with the specified values.
+        /// Default decoding limits suitable for most use cases.
         ///
-        /// - Parameters:
-        ///   - maxInputSize: Maximum input size in bytes. Default: 10 MB.
-        ///   - maxDepth: Maximum nesting depth. Default: 128.
-        ///   - maxTableKeys: Maximum keys per table. Default: 10,000.
-        ///   - maxArrayLength: Maximum array length. Default: 100,000.
-        ///   - maxStringLength: Maximum string length. Default: 1 MB.
+        /// - `maxInputSize`: 10 MB
+        /// - `maxDepth`: 128
+        /// - `maxTableKeys`: 10,000
+        /// - `maxArrayLength`: 100,000
+        /// - `maxStringLength`: 1 MB
+        public static let `default` = DecodingLimits(
+            maxInputSize: 10 * 1024 * 1024,
+            maxDepth: 128,
+            maxTableKeys: 10_000,
+            maxArrayLength: 100_000,
+            maxStringLength: 1024 * 1024
+        )
+
+        /// Decoding limits that impose no restrictions.
+        ///
+        /// - Warning: This configuration is unsafe for untrusted input
+        ///   and should only be used with data from trusted sources.
+        ///   Without limits, malicious input can cause excessive memory usage,
+        ///   stack overflow from deep nesting, or denial-of-service attacks.
+        ///
+        /// Use this only when you have full control over the input data
+        /// and need to decode arbitrarily large or complex TOML structures.
+        ///
+        /// For production use with external input, use ``default`` or
+        /// ``init(maxInputSize:maxDepth:maxTableKeys:maxArrayLength:maxStringLength:)``
+        /// with appropriate limits instead.
+        public static let unlimited = DecodingLimits(
+            maxInputSize: .max,
+            maxDepth: .max,
+            maxTableKeys: .max,
+            maxArrayLength: .max,
+            maxStringLength: .max
+        )
+
+        /// Creates new decoding limits with the specified values.
         public init(
-            maxInputSize: Int = 10 * 1024 * 1024,
-            maxDepth: Int = 128,
-            maxTableKeys: Int = 10_000,
-            maxArrayLength: Int = 100_000,
-            maxStringLength: Int = 1024 * 1024
+            maxInputSize: Int,
+            maxDepth: Int,
+            maxTableKeys: Int,
+            maxArrayLength: Int,
+            maxStringLength: Int
         ) {
             self.maxInputSize = maxInputSize
             self.maxDepth = maxDepth
@@ -142,7 +161,7 @@ public final class TOMLDecoder {
     public var keyDecodingStrategy: KeyDecodingStrategy = .useDefaultKeys
 
     /// The limits applied during decoding.
-    public var limits: DecodingLimits = DecodingLimits()
+    public var limits: DecodingLimits = .default
 
     /// A dictionary of contextual information to pass to the decoder.
     public var userInfo: [CodingUserInfoKey: any Sendable] = [:]
