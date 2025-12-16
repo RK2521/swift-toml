@@ -7,6 +7,7 @@ for fast, spec-compliant parsing with full Swift Codable support.
 
 ## Features
 
+- [x] **100% passing on [toml-test](https://github.com/toml-lang/toml-test) compliance suite**
 - [x] Full [TOML v1.0.0](https://toml.io/en/v1.0.0) specification support
 - [x] All data types: strings, integers, floats, booleans, arrays, tables
 - [x] All date-time types: offset date-time, local date-time, local date, local time
