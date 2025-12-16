@@ -637,6 +637,115 @@ struct TOMLDecoderTests {
         #expect(limits.maxStringLength == 1024 * 1024)
     }
 
+    @Test func decodingLimitsMaxDepth() throws {
+        let limits = TOMLDecoder.DecodingLimits(maxDepth: 2)
+        let decoder = TOMLDecoder(limits: limits)
+        // Depth: root (0) -> a (1) -> b (2) -> c (3) - exceeds limit of 2
+        let toml = """
+            [a.b.c]
+            value = 1
+            """
+
+        #expect(throws: TOMLDecodingError.self) {
+            try decoder.decode([String: [String: [String: [String: Int]]]].self, from: toml)
+        }
+    }
+
+    @Test func decodingLimitsMaxDepthAllowed() throws {
+        let limits = TOMLDecoder.DecodingLimits(maxDepth: 5)
+        let decoder = TOMLDecoder(limits: limits)
+        // Depth: root (0) -> a (1) -> b (2) -> c (3) -> value (4) - within limit of 5
+        let toml = """
+            [a.b.c]
+            value = 1
+            """
+
+        let result = try decoder.decode([String: [String: [String: [String: Int]]]].self, from: toml)
+        #expect(result["a"]?["b"]?["c"]?["value"] == 1)
+    }
+
+    @Test func decodingLimitsMaxTableKeys() throws {
+        let limits = TOMLDecoder.DecodingLimits(maxTableKeys: 3)
+        let decoder = TOMLDecoder(limits: limits)
+        let toml = """
+            a = 1
+            b = 2
+            c = 3
+            d = 4
+            """
+
+        #expect(throws: TOMLDecodingError.self) {
+            try decoder.decode([String: Int].self, from: toml)
+        }
+    }
+
+    @Test func decodingLimitsMaxTableKeysAllowed() throws {
+        let limits = TOMLDecoder.DecodingLimits(maxTableKeys: 3)
+        let decoder = TOMLDecoder(limits: limits)
+        let toml = """
+            a = 1
+            b = 2
+            c = 3
+            """
+
+        let result = try decoder.decode([String: Int].self, from: toml)
+        #expect(result.count == 3)
+    }
+
+    @Test func decodingLimitsMaxArrayLength() throws {
+        let limits = TOMLDecoder.DecodingLimits(maxArrayLength: 3)
+        let decoder = TOMLDecoder(limits: limits)
+        let toml = """
+            items = [1, 2, 3, 4]
+            """
+
+        struct Config: Codable {
+            let items: [Int]
+        }
+
+        #expect(throws: TOMLDecodingError.self) {
+            try decoder.decode(Config.self, from: toml)
+        }
+    }
+
+    @Test func decodingLimitsMaxArrayLengthAllowed() throws {
+        let limits = TOMLDecoder.DecodingLimits(maxArrayLength: 3)
+        let decoder = TOMLDecoder(limits: limits)
+        let toml = """
+            items = [1, 2, 3]
+            """
+
+        struct Config: Codable {
+            let items: [Int]
+        }
+
+        let result = try decoder.decode(Config.self, from: toml)
+        #expect(result.items == [1, 2, 3])
+    }
+
+    @Test func decodingLimitsMaxStringLength() throws {
+        let limits = TOMLDecoder.DecodingLimits(maxStringLength: 10)
+        let decoder = TOMLDecoder(limits: limits)
+        let toml = """
+            name = "this string is too long"
+            """
+
+        #expect(throws: TOMLDecodingError.self) {
+            try decoder.decode([String: String].self, from: toml)
+        }
+    }
+
+    @Test func decodingLimitsMaxStringLengthAllowed() throws {
+        let limits = TOMLDecoder.DecodingLimits(maxStringLength: 10)
+        let decoder = TOMLDecoder(limits: limits)
+        let toml = """
+            name = "short"
+            """
+
+        let result = try decoder.decode([String: String].self, from: toml)
+        #expect(result["name"] == "short")
+    }
+
     // MARK: - Error Cases
 
     @Test func decodeInvalidSyntax() throws {
