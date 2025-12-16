@@ -270,7 +270,8 @@ struct EncoderTests {
 
         let date = Date(timeIntervalSince1970: 0)
         let config = DateConfig(timestamp: date)
-        let encoder = TOMLEncoder(dateEncodingStrategy: .iso8601)
+        let encoder = TOMLEncoder()
+        encoder.dateEncodingStrategy = .iso8601
         let toml = try encoder.encodeToString(config)
 
         #expect(toml.contains("1970-01-01T00:00:00"))
@@ -283,7 +284,8 @@ struct EncoderTests {
 
         let date = Date(timeIntervalSince1970: 1000)
         let config = DateConfig(timestamp: date)
-        let encoder = TOMLEncoder(dateEncodingStrategy: .secondsSince1970)
+        let encoder = TOMLEncoder()
+        encoder.dateEncodingStrategy = .secondsSince1970
         let toml = try encoder.encodeToString(config)
 
         #expect(toml.contains("1000"))
@@ -296,7 +298,8 @@ struct EncoderTests {
 
         let date = Date(timeIntervalSince1970: 1)
         let config = DateConfig(timestamp: date)
-        let encoder = TOMLEncoder(dateEncodingStrategy: .millisecondsSince1970)
+        let encoder = TOMLEncoder()
+        encoder.dateEncodingStrategy = .millisecondsSince1970
         let toml = try encoder.encodeToString(config)
 
         #expect(toml.contains("1000"))
@@ -310,7 +313,8 @@ struct EncoderTests {
         let components = DateComponents(year: 2024, month: 6, day: 15, hour: 10, minute: 30, second: 0)
         let date = Calendar.current.date(from: components)!
         let config = DateConfig(timestamp: date)
-        let encoder = TOMLEncoder(dateEncodingStrategy: .localDateTime)
+        let encoder = TOMLEncoder()
+        encoder.dateEncodingStrategy = .localDateTime
         let toml = try encoder.encodeToString(config)
 
         #expect(toml.contains("2024-06-15T10:30:00"))
@@ -324,7 +328,8 @@ struct EncoderTests {
         let components = DateComponents(year: 2024, month: 6, day: 15)
         let date = Calendar.current.date(from: components)!
         let config = DateConfig(timestamp: date)
-        let encoder = TOMLEncoder(dateEncodingStrategy: .localDate)
+        let encoder = TOMLEncoder()
+        encoder.dateEncodingStrategy = .localDate
         let toml = try encoder.encodeToString(config)
 
         #expect(toml.contains("2024-06-15"))
@@ -338,7 +343,8 @@ struct EncoderTests {
         let components = DateComponents(year: 2024, month: 6, day: 15, hour: 10, minute: 30, second: 45)
         let date = Calendar.current.date(from: components)!
         let config = DateConfig(timestamp: date)
-        let encoder = TOMLEncoder(dateEncodingStrategy: .localTime)
+        let encoder = TOMLEncoder()
+        encoder.dateEncodingStrategy = .localTime
         let toml = try encoder.encodeToString(config)
 
         #expect(toml.contains("10:30:45"))
@@ -392,7 +398,8 @@ struct EncoderTests {
         }
 
         let config = Config(userName: "john", userEmail: "john@example.com", createdAt: 123)
-        let encoder = TOMLEncoder(keyEncodingStrategy: .convertToSnakeCase)
+        let encoder = TOMLEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
         let toml = try encoder.encodeToString(config)
 
         #expect(toml.contains("user_name = \"john\""))
@@ -406,7 +413,8 @@ struct EncoderTests {
         }
 
         let config = Config(userName: "john")
-        let encoder = TOMLEncoder(keyEncodingStrategy: .useDefaultKeys)
+        let encoder = TOMLEncoder()
+        encoder.keyEncodingStrategy = .useDefaultKeys
         let toml = try encoder.encodeToString(config)
 
         #expect(toml.contains("userName = \"john\""))
@@ -422,7 +430,8 @@ struct EncoderTests {
         }
 
         let config = Config(zebra: "z", alpha: "a", middle: "m")
-        let encoder = TOMLEncoder(outputFormatting: .sortedKeys)
+        let encoder = TOMLEncoder()
+        encoder.outputFormatting = .sortedKeys
         let toml = try encoder.encodeToString(config)
 
         let lines = toml.components(separatedBy: "\n").filter { !$0.isEmpty }
@@ -437,7 +446,8 @@ struct EncoderTests {
         }
 
         let config = Config(name: "test")
-        let encoder = TOMLEncoder(outputFormatting: .prettyPrinted)
+        let encoder = TOMLEncoder()
+        encoder.outputFormatting = .prettyPrinted
         _ = try encoder.encodeToString(config)
     }
 
@@ -448,7 +458,8 @@ struct EncoderTests {
         }
 
         let config = Config(zebra: "z", alpha: "a")
-        let encoder = TOMLEncoder(outputFormatting: [.sortedKeys, .prettyPrinted])
+        let encoder = TOMLEncoder()
+        encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
         let toml = try encoder.encodeToString(config)
 
         let lines = toml.components(separatedBy: "\n").filter { !$0.isEmpty }
@@ -479,7 +490,8 @@ struct EncoderTests {
         }
 
         let config = Config(name: "test")
-        let encoder = TOMLEncoder(userInfo: [key: "testValue"])
+        let encoder = TOMLEncoder()
+        encoder.userInfo = [key: "testValue"]
         _ = try encoder.encode(config)
     }
 
@@ -487,7 +499,8 @@ struct EncoderTests {
 
     @Test func encodeDictionary() throws {
         let dict = ["key1": "value1", "key2": "value2"]
-        let encoder = TOMLEncoder(outputFormatting: .sortedKeys)
+        let encoder = TOMLEncoder()
+        encoder.outputFormatting = .sortedKeys
         let toml = try encoder.encodeToString(dict)
 
         #expect(toml.contains("key1 = \"value1\""))

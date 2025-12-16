@@ -173,7 +173,8 @@ first_name = "Ada"
 last_name = "Lovelace"
 """
 
-let decoder = TOMLDecoder(keyDecodingStrategy: .convertFromSnakeCase)
+let decoder = TOMLDecoder()
+decoder.keyDecodingStrategy = .convertFromSnakeCase
 let user = try decoder.decode(User.self, from: toml)
 ```
 
@@ -182,11 +183,10 @@ let user = try decoder.decode(User.self, from: toml)
 Control how dates and keys are encoded:
 
 ```swift
-let encoder = TOMLEncoder(
-    dateEncodingStrategy: .localDateTime,
-    keyEncodingStrategy: .convertToSnakeCase,
-    outputFormatting: .sortedKeys
-)
+let encoder = TOMLEncoder()
+encoder.dateEncodingStrategy = .localDateTime
+encoder.keyEncodingStrategy = .convertToSnakeCase
+encoder.outputFormatting = .sortedKeys
 
 let data = try encoder.encode(myValue)
 ```
@@ -196,13 +196,12 @@ let data = try encoder.encode(myValue)
 Protect against malicious or malformed input:
 
 ```swift
-let decoder = TOMLDecoder(
-    limits: TOMLDecoder.DecodingLimits(
-        maxInputSize: 1024 * 1024,  // 1 MB
-        maxDepth: 64,
-        maxTableKeys: 1000,
-        maxArrayLength: 10000
-    )
+let decoder = TOMLDecoder()
+decoder.limits = TOMLDecoder.DecodingLimits(
+    maxInputSize: 1024 * 1024,  // 1 MB
+    maxDepth: 64,
+    maxTableKeys: 1000,
+    maxArrayLength: 10000
 )
 ```
 

@@ -29,7 +29,8 @@ import Foundation
 /// The decoder supports multiple date formats through ``DateDecodingStrategy``:
 ///
 /// ```swift
-/// let decoder = TOMLDecoder(dateDecodingStrategy: .iso8601)
+/// let decoder = TOMLDecoder()
+/// decoder.dateDecodingStrategy = .iso8601
 /// ```
 ///
 /// ## Key Decoding
@@ -37,9 +38,10 @@ import Foundation
 /// Use ``KeyDecodingStrategy`` to automatically convert between naming conventions:
 ///
 /// ```swift
-/// let decoder = TOMLDecoder(keyDecodingStrategy: .convertFromSnakeCase)
+/// let decoder = TOMLDecoder()
+/// decoder.keyDecodingStrategy = .convertFromSnakeCase
 /// ```
-public final class TOMLDecoder: Sendable {
+public final class TOMLDecoder {
 
     // MARK: - Date Decoding Strategy
 
@@ -134,37 +136,21 @@ public final class TOMLDecoder: Sendable {
     // MARK: - Properties
 
     /// The strategy used when decoding `Date` values.
-    public let dateDecodingStrategy: DateDecodingStrategy
+    public var dateDecodingStrategy: DateDecodingStrategy = .iso8601
 
     /// The strategy used when decoding keys.
-    public let keyDecodingStrategy: KeyDecodingStrategy
+    public var keyDecodingStrategy: KeyDecodingStrategy = .useDefaultKeys
 
     /// The limits applied during decoding.
-    public let limits: DecodingLimits
+    public var limits: DecodingLimits = DecodingLimits()
 
     /// A dictionary of contextual information to pass to the decoder.
-    public let userInfo: [CodingUserInfoKey: any Sendable]
+    public var userInfo: [CodingUserInfoKey: any Sendable] = [:]
 
     // MARK: - Initialization
 
-    /// Creates a new TOML decoder with the specified configuration.
-    ///
-    /// - Parameters:
-    ///   - dateDecodingStrategy: The strategy for decoding dates. Default: `.iso8601`.
-    ///   - keyDecodingStrategy: The strategy for decoding keys. Default: `.useDefaultKeys`.
-    ///   - limits: The decoding limits. Default: standard limits.
-    ///   - userInfo: Contextual information for the decoder. Default: empty.
-    public init(
-        dateDecodingStrategy: DateDecodingStrategy = .iso8601,
-        keyDecodingStrategy: KeyDecodingStrategy = .useDefaultKeys,
-        limits: DecodingLimits = DecodingLimits(),
-        userInfo: [CodingUserInfoKey: any Sendable] = [:]
-    ) {
-        self.dateDecodingStrategy = dateDecodingStrategy
-        self.keyDecodingStrategy = keyDecodingStrategy
-        self.limits = limits
-        self.userInfo = userInfo
-    }
+    /// Creates a new TOML decoder.
+    public init() {}
 
     // MARK: - Decoding
 

@@ -455,7 +455,8 @@ struct TOMLDecoderTests {
             let timestamp: Date
         }
 
-        let decoder = TOMLDecoder(dateDecodingStrategy: .secondsSince1970)
+        let decoder = TOMLDecoder()
+        decoder.dateDecodingStrategy = .secondsSince1970
         let config = try decoder.decode(Config.self, from: toml)
 
         #expect(config.timestamp.timeIntervalSince1970 == 1000)
@@ -470,7 +471,8 @@ struct TOMLDecoderTests {
             let timestamp: Date
         }
 
-        let decoder = TOMLDecoder(dateDecodingStrategy: .millisecondsSince1970)
+        let decoder = TOMLDecoder()
+        decoder.dateDecodingStrategy = .millisecondsSince1970
         let config = try decoder.decode(Config.self, from: toml)
 
         #expect(config.timestamp.timeIntervalSince1970 == 1000)
@@ -491,7 +493,8 @@ struct TOMLDecoderTests {
             let createdAt: Int
         }
 
-        let decoder = TOMLDecoder(keyDecodingStrategy: .convertFromSnakeCase)
+        let decoder = TOMLDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
         let config = try decoder.decode(Config.self, from: toml)
 
         #expect(config.userName == "john")
@@ -508,7 +511,8 @@ struct TOMLDecoderTests {
             let userName: String
         }
 
-        let decoder = TOMLDecoder(keyDecodingStrategy: .useDefaultKeys)
+        let decoder = TOMLDecoder()
+        decoder.keyDecodingStrategy = .useDefaultKeys
         let config = try decoder.decode(Config.self, from: toml)
 
         #expect(config.userName == "john")
@@ -605,7 +609,8 @@ struct TOMLDecoderTests {
             let name: String
         }
 
-        let decoder = TOMLDecoder(userInfo: [key: "testValue"])
+        let decoder = TOMLDecoder()
+        decoder.userInfo = [key: "testValue"]
         _ = try decoder.decode(Config.self, from: toml)
     }
 
@@ -613,7 +618,8 @@ struct TOMLDecoderTests {
 
     @Test func decodingLimitsMaxInputSize() throws {
         let limits = TOMLDecoder.DecodingLimits(maxInputSize: 10)
-        let decoder = TOMLDecoder(limits: limits)
+        let decoder = TOMLDecoder()
+        decoder.limits = limits
         let toml = "name = \"this is a very long string that exceeds the limit\""
 
         #expect(throws: TOMLDecodingError.self) {
@@ -1075,7 +1081,8 @@ struct TOMLDecoderTests {
             let timestamp: Date
         }
 
-        let decoder = TOMLDecoder(dateDecodingStrategy: .secondsSince1970)
+        let decoder = TOMLDecoder()
+        decoder.dateDecodingStrategy = .secondsSince1970
         let config = try decoder.decode(Config.self, from: toml)
 
         #expect(config.timestamp.timeIntervalSince1970 == 1000)
@@ -1090,7 +1097,8 @@ struct TOMLDecoderTests {
             let timestamp: Date
         }
 
-        let decoder = TOMLDecoder(dateDecodingStrategy: .millisecondsSince1970)
+        let decoder = TOMLDecoder()
+        decoder.dateDecodingStrategy = .millisecondsSince1970
         let config = try decoder.decode(Config.self, from: toml)
 
         #expect(config.timestamp.timeIntervalSince1970 == 5)

@@ -12,7 +12,8 @@ struct TOMLEncoderCLI {
             }
 
             let value = try parseTaggedJSON(jsonString)
-            let encoder = TOMLEncoder(outputFormatting: .sortedKeys)
+            let encoder = TOMLEncoder()
+            encoder.outputFormatting = .sortedKeys
             let toml = try encoder.encodeToString(value)
             print(toml, terminator: "")
         } catch {

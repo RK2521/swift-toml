@@ -25,7 +25,8 @@ import Foundation
 /// The encoder supports multiple date formats through ``DateEncodingStrategy``:
 ///
 /// ```swift
-/// let encoder = TOMLEncoder(dateEncodingStrategy: .localDateTime)
+/// let encoder = TOMLEncoder()
+/// encoder.dateEncodingStrategy = .localDateTime
 /// ```
 ///
 /// ## Key Encoding
@@ -33,7 +34,8 @@ import Foundation
 /// Use ``KeyEncodingStrategy`` to automatically convert between naming conventions:
 ///
 /// ```swift
-/// let encoder = TOMLEncoder(keyEncodingStrategy: .convertToSnakeCase)
+/// let encoder = TOMLEncoder()
+/// encoder.keyEncodingStrategy = .convertToSnakeCase
 /// ```
 ///
 /// ## Output Formatting
@@ -41,9 +43,10 @@ import Foundation
 /// Control the output format with ``OutputFormatting``:
 ///
 /// ```swift
-/// let encoder = TOMLEncoder(outputFormatting: [.sortedKeys, .prettyPrinted])
+/// let encoder = TOMLEncoder()
+/// encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
 /// ```
-public final class TOMLEncoder: Sendable {
+public final class TOMLEncoder {
 
     // MARK: - Date Encoding Strategy
 
@@ -119,37 +122,21 @@ public final class TOMLEncoder: Sendable {
     // MARK: - Properties
 
     /// The strategy used when encoding `Date` values.
-    public let dateEncodingStrategy: DateEncodingStrategy
+    public var dateEncodingStrategy: DateEncodingStrategy = .iso8601
 
     /// The strategy used when encoding keys.
-    public let keyEncodingStrategy: KeyEncodingStrategy
+    public var keyEncodingStrategy: KeyEncodingStrategy = .useDefaultKeys
 
     /// The output formatting options.
-    public let outputFormatting: OutputFormatting
+    public var outputFormatting: OutputFormatting = []
 
     /// A dictionary of contextual information to pass to the encoder.
-    public let userInfo: [CodingUserInfoKey: any Sendable]
+    public var userInfo: [CodingUserInfoKey: any Sendable] = [:]
 
     // MARK: - Initialization
 
-    /// Creates a new TOML encoder with the specified configuration.
-    ///
-    /// - Parameters:
-    ///   - dateEncodingStrategy: The strategy for encoding dates. Default: `.iso8601`.
-    ///   - keyEncodingStrategy: The strategy for encoding keys. Default: `.useDefaultKeys`.
-    ///   - outputFormatting: The output formatting options. Default: none.
-    ///   - userInfo: Contextual information for the encoder. Default: empty.
-    public init(
-        dateEncodingStrategy: DateEncodingStrategy = .iso8601,
-        keyEncodingStrategy: KeyEncodingStrategy = .useDefaultKeys,
-        outputFormatting: OutputFormatting = [],
-        userInfo: [CodingUserInfoKey: any Sendable] = [:]
-    ) {
-        self.dateEncodingStrategy = dateEncodingStrategy
-        self.keyEncodingStrategy = keyEncodingStrategy
-        self.outputFormatting = outputFormatting
-        self.userInfo = userInfo
-    }
+    /// Creates a new TOML encoder.
+    public init() {}
 
     // MARK: - Encoding
 
