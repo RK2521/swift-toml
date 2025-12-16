@@ -1,0 +1,44 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:TOML}",
+            "name": "Debug toml-encoder",
+            "target": "toml-encoder",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug toml-encoder"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:TOML}",
+            "name": "Release toml-encoder",
+            "target": "toml-encoder",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release toml-encoder"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:TOML}",
+            "name": "Debug toml-decoder",
+            "target": "toml-decoder",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug toml-decoder"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:TOML}",
+            "name": "Release toml-decoder",
+            "target": "toml-decoder",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release toml-decoder"
+        }
+    ]
+}
