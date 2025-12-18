@@ -40,7 +40,13 @@ dependencies: [
 Then add the dependency to your target:
 
 ```swift
-.target(name: "YourTarget", dependencies: ["TOML"])
+.target(
+    name: "YourTarget",
+    dependencies: ["TOML"],
+    swiftSettings: [
+        .interoperabilityMode(.Cxx)
+    ]
+)
 ```
 
 ## Usage
